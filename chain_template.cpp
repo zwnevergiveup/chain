@@ -9,7 +9,7 @@ template<typename T>
 struct chainNode//该结构体为链表中储存的单个元素的结构;
 {
     T Element;
-    chainNode<T> *Next;
+    chainNode<T> *Next=NULL;
     chainNode(){}
     chainNode(const T &element){this->Element=element;
                                 Next=NULL;}
@@ -30,6 +30,8 @@ public:
     virtual void erase(int theIndex)=0;
     virtual void insert(int theIndex,const T& theElement)=0;
     virtual void output(std::ostream &out)const =0;
+    virtual void push_back(const T &theElement)=0;
+
 };
 template<typename T>
 class chain:public linerList<T>
@@ -46,9 +48,10 @@ public:
     void erase(int theIndex);
     void insert(int theIndex,const T& theElement);
     void output(std::ostream &out)const;
+    void push_back(const T &theElement);
 protected:
     void checkIndex(int theIndex)const;
-    chainNode<T> *FirstNode;
+    chainNode<T> *FirstNode=NULL;
     int ListSize;
 };
 template<typename T>
@@ -165,6 +168,19 @@ void chain<T>::insert(int theIndex,const T  &theElement)
     ++ListSize;
 }
 template<typename T>
+void chain<T>::push_back(const T &theElement)
+{
+    if(FirstNode==NULL)
+     FirstNode =new chainNode<T>(theElement);
+    else
+    {
+      chainNode<T> *ergodicNode=FirstNode;
+      while(ergodicNode->Next!=NULL)
+          ergodicNode=ergodicNode->Next;
+      ergodicNode->Next=new chainNode<T>(theElement);
+    }
+}
+template<typename T>
 void chain<T>::output(std::ostream &out)const
 {
     for(chainNode<T> *ergodicNode=FirstNode;
@@ -203,12 +219,13 @@ public:
 protected:
     chainNode<T> *Node;
 };
+
 int main(){
     chain<int> *link=new chain<int>(20);
-    for(int i=20;i>0;--i)
+for(int i=0;i<20;++i)
+  // link->push_back(i);
+  //  link->erase(3);
     link->insert(0,i);
-    link->erase(3);
-    link->insert(3,520);
     std::cout<<*link<<std::endl;
  return 0;
 }
